@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>독도 역사 인터랙티브 연대기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; scroll-behavior: smooth; }
+        
+        /* Timeline styling */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-container::before {
+                left: 20px;
+            }
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            width: 100%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            background: #2563eb;
+            border: 4px solid white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: translateX(-50%) scale(1.5);
+            background: #ef4444;
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .category-tag {
+            @apply px-3 py-1 rounded-full text-xs font-bold mb-2 inline-block;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-[60] bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="p-1.5 bg-blue-600 rounded-lg group-hover:bg-blue-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span class="font-bold text-lg tracking-tight hidden sm:inline-block">독도 연대기</span>
+            </a>
+            
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all font-semibold text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                홈으로
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-blue-700 text-white py-32 px-4 overflow-hidden mt-16">
+        <div class="absolute inset-0 opacity-20">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path>
+            </svg>
+        </div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-5xl font-black mb-6 tracking-tight">독도 역사 연대기</h1>
+            <p class="text-xl text-blue-100 font-light leading-relaxed">
+                기록으로 증명하는 대한민국 영토 독도,<br>그 유구한 역사의 흐름을 인터랙티브 타임라인으로 확인하세요.
+            </p>
+        </div>
+    </header>
+
+    <!-- Navigation & Search Bar (Sticky) -->
+    <div class="sticky top-16 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 py-4 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="relative w-full md:w-64">
+                <input type="text" id="searchInput" placeholder="역사적 사건 검색..." 
+                       class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <svg class="w-4 h-4 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar w-full md:w-auto">
+                <button onclick="filterItems('all')" class="filter-btn active bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap">전체</button>
+                <button onclick="filterItems('고문헌')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">고문헌</button>
+                <button onclick="filterItems('일본기록')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">일본기록</button>
+                <button onclick="filterItems('활동')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">민간활동</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Timeline -->
+    <main class="max-w-5xl mx-auto px-4 py-16">
+        <div class="timeline-container relative" id="timelineContainer">
+            <!-- Items will be injected here -->
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20">
+            <p class="text-slate-400 text-lg">검색 결과가 없습니다.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="mb-4">본 자료는 동북아역사재단 및 국립해양조사원의 공개 자료를 바탕으로 제작되었습니다.</p>
+            <p class="text-sm">© <span id="currentYear"></span> Dokdo History Project. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform transition-all">
+            <div id="modalBanner" class="h-32 bg-blue-600 p-8 flex items-end">
+                <h2 id="modalYear" class="text-4xl font-black text-white/50 leading-none">1900</h2>
+            </div>
+            <div class="p-8">
+                <h3 id="modalEvent" class="text-2xl font-bold mb-4">대한제국 칙령 41호</h3>
+                <p id="modalDetail" class="text-slate-600 leading-relaxed mb-6"></p>
+                <div class="flex justify-between items-center border-t pt-6">
+                    <span id="modalSource" class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded"></span>
+                    <button onclick="closeModal()" class="bg-slate-900 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-600 transition-colors">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+            { year: "1454", event: "세종실록지리지", detail: "조선 초기 관찬 지리지로, 우산(독도)과 무릉(울릉도)이 강원도 울진현에 속한다고 명확히 기록하고 있습니다. '두 섬이 서로 거리가 멀지 않아 날씨가 맑으면 바라볼 수 있다'는 설명은 독도를 지칭하는 결정적 증거입니다.", source: "출처: [1]", category: "고문헌" },
+            { year: "1531", event: "신증동국여지승람", detail: "팔도총도에 울릉도와 독도가 그려져 있으며, 독도가 우리 영토임을 다시 한번 확고히 하는 관찬 지리지입니다.", source: "출처: [2]", category: "고문헌" },
+            { year: "1667", event: "은주시청합기", detail: "일본 시마네현의 관리가 작성한 문헌입니다. 일본의 서북쪽 경계를 '오키섬'으로 한정하여, 울릉도와 독도가 일본 영토 밖임을 스스로 인정하고 있습니다.", source: "출처: [3]", category: "일본기록" },
+            { year: "1693", event: "1차 안용복 사건", detail: "안용복이 일본 어민의 불법 어로활동에 항의하다 일본으로 끌려갔으나, 오히려 독도가 조선 땅임을 당당히 주장하고 돌아온 사건입니다.", source: "출처: [4]", category: "활동" },
+            { year: "1696", event: "2차 안용복 사건", detail: "안용복이 다시 일본에 건너가 울릉도와 독도가 조선 영토임을 확인받았습니다. 이 결과로 일본 막부는 '울릉도 도해 금지령'을 내리게 됩니다.", source: "출처: [5]", category: "활동" },
+            { year: "1785", event: "삼국접양지도", detail: "일본인 학자 하야시 시헤이가 제작한 지도로, 독도를 조선과 같은 황색으로 칠하고 '조선의 것'이라고 명기하여 국제적으로 독도가 한국 땅임을 보여줍니다.", source: "출처: [6]", category: "일본기록" },
+            { year: "1877", event: "태정관 지령", detail: "메이지 정부 최고 행정기관인 태정관이 내무성에 '울릉도와 독도는 일본과 관계없음을 명심하라'고 내린 공식 지시문입니다.", source: "출처: [7]", category: "일본기록" },
+            { year: "1900", event: "대한제국 칙령 41호", detail: "고종 황제가 독도를 '석도'로 명명하고 울릉군의 관할 구역으로 공식 반포함으로써 근대 법적으로 독도 영유권을 공고히 했습니다.", source: "출처: [8]", category: "한국령" },
+            { year: "1905", event: "시마네현 고시 40호", detail: "일본이 러일전쟁 중 군사적 목적으로 독도를 무주지라 주장하며 불법적으로 '다케시마'로 편입시킨 사건입니다.", source: "출처: [9]", category: "분쟁" },
+            { year: "1946", event: "SCAPIN 제677호", detail: "연합군최고사령관 지령으로, 일본의 통치권이 미치는 범위에서 독도를 제외함으로써 전후 국제 질서에서 독도가 한국 땅임을 재확인했습니다.", source: "출처: [10]", category: "현대사" },
+            { year: "1952", event: "평화선 선포", detail: "이승만 대통령이 '인접 해양의 주권에 관한 대통령 선언'을 통해 독도를 포함한 해양 경계선을 선포하여 실효적 지배를 강화했습니다.", source: "출처: [12]", category: "현대사" },
+            { year: "1953", event: "독도의용수비대", detail: "홍순칠 등 33인의 민간인들이 스스로 무장하여 일본의 끊임없는 침범으로부터 독도를 지켜낸 숭고한 민간 활동입니다.", source: "출처: [13]", category: "활동" },
+            { year: "2005", event: "다케시마의 날", detail: "일본 시마네현이 영유권 주장을 위해 조례로 2월 22일을 기념일로 지정하여 한일 관계의 큰 갈등 원인이 되었습니다.", source: "출처: [17]", category: "분쟁" }
+        ];
+
+        const container = document.getElementById('timelineContainer');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+
+        function getCategoryColor(cat) {
+            const colors = {
+                '고문헌': 'bg-blue-600',
+                '일본기록': 'bg-purple-600',
+                '활동': 'bg-green-600',
+                '한국령': 'bg-red-600',
+                '현대사': 'bg-emerald-600',
+                '분쟁': 'bg-orange-600'
+            };
+            return colors[cat] || 'bg-slate-600';
+        }
+
+        function renderTimeline(filter = '', categoryFilter = 'all') {
+            const filtered = data.filter(item => {
+                const matchesSearch = item.event.toLowerCase().includes(filter.toLowerCase()) || item.year.includes(filter);
+                const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            container.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            filtered.forEach((item, index) => {
+                const isEven = index % 2 === 0;
+                const catColor = getCategoryColor(item.category);
+                
+                const html = `
+                    <div class="timeline-item reveal" onclick="openModal(${index})">
+                        <div class="timeline-dot"></div>
+                        <div class="flex flex-col md:flex-row items-center w-full">
+                            <div class="w-full md:w-1/2 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12 md:order-last'} mb-4 md:mb-0">
+                                <span class="text-3xl font-black text-blue-600 block mb-1">${item.year}</span>
+                                <div class="${catColor} text-white category-tag">${item.category}</div>
+                                <h3 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">${item.event}</h3>
+                            </div>
+                            <div class="w-full md:w-1/2 ${isEven ? 'md:pl-12' : 'md:pr-12'}">
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all cursor-pointer group">
+                                    <p class="text-slate-500 text-sm line-clamp-2">${item.detail}</p>
+                                    <div class="mt-4 flex items-center text-blue-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                        자세히 보기 <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            handleScroll();
+        }
+
+        function openModal(index) {
+            const item = data[index];
+            document.getElementById('modalYear').textContent = item.year;
+            document.getElementById('modalEvent').textContent = item.event;
+            document.getElementById('modalDetail').textContent = item.detail;
+            document.getElementById('modalSource').textContent = item.source;
+            document.getElementById('modalBanner').className = `h-32 p-8 flex items-end ${getCategoryColor(item.category)}`;
+            
+            const modal = document.getElementById('detailModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function filterItems(category) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+            event.target.classList.add('active', 'bg-blue-600', 'text-white');
+            
+            renderTimeline(searchInput.value, category === '전체' ? 'all' : category);
+        }
+
+        function handleScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', () => {
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const activeCategory = activeBtn ? activeBtn.textContent : '전체';
+            renderTimeline(searchInput.value, activeCategory === '전체' ? 'all' : activeCategory);
+        });
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') closeModal();
+        });
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        renderTimeline();
+
+    </script>
+</body>
+</html>
