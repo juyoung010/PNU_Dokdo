@@ -9,7 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
         body { font-family: 'Pretendard', sans-serif; scroll-behavior: smooth; }
         
-        /* Timeline styling */
+        /* 메인 타임라인 수직선 */
         .timeline-container::before {
             content: '';
             position: absolute;
@@ -22,16 +22,10 @@
         }
         
         @media (max-width: 768px) {
-            .timeline-container::before {
-                left: 20px;
-            }
+            .timeline-container::before { left: 20px; }
         }
 
-        .timeline-item {
-            position: relative;
-            margin-bottom: 4rem;
-            width: 100%;
-        }
+        .timeline-item { position: relative; margin-bottom: 4rem; width: 100%; cursor: pointer; }
 
         .timeline-dot {
             position: absolute;
@@ -48,9 +42,7 @@
         }
 
         @media (max-width: 768px) {
-            .timeline-dot {
-                left: 20px;
-            }
+            .timeline-dot { left: 20px; }
         }
 
         .timeline-item:hover .timeline-dot {
@@ -58,33 +50,31 @@
             background: #ef4444;
         }
 
-        /* Animation classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* 애니메이션 효과 */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .category-tag {
-            @apply px-3 py-1 rounded-full text-xs font-bold mb-2 inline-block;
-        }
+        .category-tag { @apply px-3 py-1 rounded-full text-xs font-bold mb-2 inline-block; }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        /* 가로 스크롤바 숨기기 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 가로 연표 커스텀 스타일 */
+        .mini-timeline-track {
+            height: 2px;
+            background: #cbd5e1;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            z-index: 0;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <!-- Top Navigation Bar -->
+    <!-- 상단 네비게이션 -->
     <nav class="fixed top-0 left-0 right-0 z-[60] bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2 group">
@@ -101,69 +91,114 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative bg-blue-700 text-white py-32 px-4 overflow-hidden mt-16">
-        <div class="absolute inset-0 opacity-20">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path>
-            </svg>
+    <!-- 히어로 섹션 -->
+    <header class="relative bg-slate-900 text-white py-32 px-4 overflow-hidden mt-16">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-900/50 to-slate-900"></div>
+            <!-- 배경 패턴이나 이미지가 들어갈 수 있는 공간 -->
         </div>
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h1 class="text-5xl font-black mb-6 tracking-tight">독도 역사 연대기</h1>
-            <p class="text-xl text-blue-100 font-light leading-relaxed">
-                기록으로 증명하는 대한민국 영토 독도,<br>그 유구한 역사의 흐름을 인터랙티브 타임라인으로 확인하세요.
+            <h1 class="text-5xl font-black mb-6 tracking-tight leading-tight">독도, 기록이 말하는<br><span class="text-blue-400">우리의 역사</span></h1>
+            <p class="text-xl text-slate-300 font-light leading-relaxed">
+                수백 년간 이어져 온 문헌과 증언을 통해 독도의 역사를 확인해 보세요.
             </p>
         </div>
     </header>
 
-    <!-- Navigation & Search Bar (Sticky) -->
+    <!-- 요약 가로 연표 (인포그래픽 스타일) -->
+    <section class="max-w-6xl mx-auto px-4 -mt-12 relative z-20 mb-16">
+        <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
+            <h2 class="text-center text-slate-400 font-bold uppercase tracking-widest text-xs mb-10">Historical Milestones</h2>
+            <div class="relative px-4">
+                <div class="mini-timeline-track"></div>
+                <div class="flex justify-between items-start relative z-10 overflow-x-auto no-scrollbar gap-8">
+                    <!-- 1454 -->
+                    <div class="flex flex-col items-center min-w-[120px] text-center group cursor-help" onclick="scrollToYear('1454')">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 border-4 border-white shadow-md mb-4 flex items-center justify-center text-white text-xs font-bold group-hover:scale-125 transition-transform">01</div>
+                        <span class="text-blue-600 font-black text-sm mb-1">1454년</span>
+                        <p class="text-slate-800 font-bold text-xs">세종실록지리지</p>
+                    </div>
+                    <!-- 1696 -->
+                    <div class="flex flex-col items-center min-w-[120px] text-center group cursor-help" onclick="scrollToYear('1696')">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 border-4 border-white shadow-md mb-4 flex items-center justify-center text-white text-xs font-bold group-hover:scale-125 transition-transform">02</div>
+                        <span class="text-blue-600 font-black text-sm mb-1">1696년</span>
+                        <p class="text-slate-800 font-bold text-xs">안용복 활동</p>
+                    </div>
+                    <!-- 1877 -->
+                    <div class="flex flex-col items-center min-w-[120px] text-center group cursor-help" onclick="scrollToYear('1877')">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 border-4 border-white shadow-md mb-4 flex items-center justify-center text-white text-xs font-bold group-hover:scale-125 transition-transform">03</div>
+                        <span class="text-blue-600 font-black text-sm mb-1">1877년</span>
+                        <p class="text-slate-800 font-bold text-xs">태정관 지령</p>
+                    </div>
+                    <!-- 1900 -->
+                    <div class="flex flex-col items-center min-w-[120px] text-center group cursor-help" onclick="scrollToYear('1900')">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 border-4 border-white shadow-md mb-4 flex items-center justify-center text-white text-xs font-bold group-hover:scale-125 transition-transform">04</div>
+                        <span class="text-blue-600 font-black text-sm mb-1">1900년</span>
+                        <p class="text-slate-800 font-bold text-xs">대한제국 칙령</p>
+                    </div>
+                    <!-- 1953 -->
+                    <div class="flex flex-col items-center min-w-[120px] text-center group cursor-help" onclick="scrollToYear('1953')">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 border-4 border-white shadow-md mb-4 flex items-center justify-center text-white text-xs font-bold group-hover:scale-125 transition-transform">05</div>
+                        <span class="text-blue-600 font-black text-sm mb-1">1953년</span>
+                        <p class="text-slate-800 font-bold text-xs">독도의용수비대</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 필터 및 검색바 (Sticky) -->
     <div class="sticky top-16 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 py-4 shadow-sm">
         <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="relative w-full md:w-64">
-                <input type="text" id="searchInput" placeholder="역사적 사건 검색..." 
+                <input type="text" id="searchInput" placeholder="사건 혹은 연도 검색..." 
                        class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 <svg class="w-4 h-4 absolute left-3 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
-            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar w-full md:w-auto">
-                <button onclick="filterItems('all')" class="filter-btn active bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap">전체</button>
-                <button onclick="filterItems('고문헌')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">고문헌</button>
-                <button onclick="filterItems('일본기록')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">일본기록</button>
-                <button onclick="filterItems('활동')" class="filter-btn bg-white border border-slate-200 px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-slate-50 whitespace-nowrap">민간활동</button>
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar w-full md:w-auto" id="filterContainer">
+                <button onclick="filterItems('all')" class="filter-btn active bg-blue-600 text-white px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all shadow-md shadow-blue-200">전체</button>
+                <button onclick="filterItems('고문헌')" class="filter-btn bg-white text-slate-600 border border-slate-200 px-5 py-2 rounded-full text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all">고문헌</button>
+                <button onclick="filterItems('일본기록')" class="filter-btn bg-white text-slate-600 border border-slate-200 px-5 py-2 rounded-full text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all">일본기록</button>
+                <button onclick="filterItems('활동')" class="filter-btn bg-white text-slate-600 border border-slate-200 px-5 py-2 rounded-full text-xs font-bold hover:bg-slate-50 whitespace-nowrap transition-all">민간활동</button>
             </div>
         </div>
     </div>
 
-    <!-- Main Timeline -->
-    <main class="max-w-5xl mx-auto px-4 py-16">
+    <!-- 메인 타임라인 영역 -->
+    <main class="max-w-5xl mx-auto px-4 py-24">
         <div class="timeline-container relative" id="timelineContainer">
-            <!-- Items will be injected here -->
+            <!-- 데이터가 여기에 주입됩니다 -->
         </div>
 
         <div id="noResults" class="hidden text-center py-20">
-            <p class="text-slate-400 text-lg">검색 결과가 없습니다.</p>
+            <p class="text-slate-400 text-lg italic">해당하는 역사적 기록이 없습니다.</p>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 px-4">
+    <!-- 푸터 -->
+    <footer class="bg-slate-900 text-slate-500 py-16 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <p class="mb-4">본 자료는 동북아역사재단 및 국립해양조사원의 공개 자료를 바탕으로 제작되었습니다.</p>
-            <p class="text-sm">© <span id="currentYear"></span> Dokdo History Project. All rights reserved.</p>
+            <div class="flex justify-center gap-6 mb-8 text-slate-300">
+                <a href="#" class="hover:text-white transition-colors">공식 독도연구소</a>
+                <a href="#" class="hover:text-white transition-colors">외교부 독도홈페이지</a>
+            </div>
+            <p class="mb-4 text-sm leading-loose">본 타임라인은 동북아역사재단 및 국립해양조사원의 공개 자료를 바탕으로 교육적 목적으로 제작되었습니다.</p>
+            <p class="text-xs font-mono uppercase tracking-widest mt-8">© <span id="currentYear"></span> Dokdo Interactive Chronicle.</p>
         </div>
     </footer>
 
-    <!-- Detail Modal -->
+    <!-- 상세 모달창 -->
     <div id="detailModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform transition-all">
-            <div id="modalBanner" class="h-32 bg-blue-600 p-8 flex items-end">
-                <h2 id="modalYear" class="text-4xl font-black text-white/50 leading-none">1900</h2>
+        <div class="bg-white rounded-[2rem] max-w-lg w-full overflow-hidden shadow-2xl transform transition-all border border-white/20">
+            <div id="modalBanner" class="h-32 p-8 flex items-end">
+                <h2 id="modalYear" class="text-5xl font-black text-white/40 leading-none">1900</h2>
             </div>
             <div class="p-8">
-                <h3 id="modalEvent" class="text-2xl font-bold mb-4">대한제국 칙령 41호</h3>
-                <p id="modalDetail" class="text-slate-600 leading-relaxed mb-6"></p>
-                <div class="flex justify-between items-center border-t pt-6">
-                    <span id="modalSource" class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded"></span>
-                    <button onclick="closeModal()" class="bg-slate-900 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-600 transition-colors">닫기</button>
+                <h3 id="modalEvent" class="text-2xl font-black text-slate-900 mb-4">사건명</h3>
+                <p id="modalDetail" class="text-slate-600 leading-relaxed mb-8 text-lg font-medium"></p>
+                <div class="flex justify-between items-center border-t border-slate-100 pt-6">
+                    <span id="modalSource" class="text-[10px] font-bold tracking-widest text-slate-400 uppercase bg-slate-50 px-3 py-1 rounded-full">SOURCE</span>
+                    <button onclick="closeModal()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-600 transition-all shadow-lg active:scale-95">확인</button>
                 </div>
             </div>
         </div>
@@ -171,19 +206,19 @@
 
     <script>
         const data = [
-            { year: "1454", event: "세종실록지리지", detail: "조선 초기 관찬 지리지로, 우산(독도)과 무릉(울릉도)이 강원도 울진현에 속한다고 명확히 기록하고 있습니다. '두 섬이 서로 거리가 멀지 않아 날씨가 맑으면 바라볼 수 있다'는 설명은 독도를 지칭하는 결정적 증거입니다.", source: "출처: [1]", category: "고문헌" },
-            { year: "1531", event: "신증동국여지승람", detail: "팔도총도에 울릉도와 독도가 그려져 있으며, 독도가 우리 영토임을 다시 한번 확고히 하는 관찬 지리지입니다.", source: "출처: [2]", category: "고문헌" },
-            { year: "1667", event: "은주시청합기", detail: "일본 시마네현의 관리가 작성한 문헌입니다. 일본의 서북쪽 경계를 '오키섬'으로 한정하여, 울릉도와 독도가 일본 영토 밖임을 스스로 인정하고 있습니다.", source: "출처: [3]", category: "일본기록" },
-            { year: "1693", event: "1차 안용복 사건", detail: "안용복이 일본 어민의 불법 어로활동에 항의하다 일본으로 끌려갔으나, 오히려 독도가 조선 땅임을 당당히 주장하고 돌아온 사건입니다.", source: "출처: [4]", category: "활동" },
-            { year: "1696", event: "2차 안용복 사건", detail: "안용복이 다시 일본에 건너가 울릉도와 독도가 조선 영토임을 확인받았습니다. 이 결과로 일본 막부는 '울릉도 도해 금지령'을 내리게 됩니다.", source: "출처: [5]", category: "활동" },
-            { year: "1785", event: "삼국접양지도", detail: "일본인 학자 하야시 시헤이가 제작한 지도로, 독도를 조선과 같은 황색으로 칠하고 '조선의 것'이라고 명기하여 국제적으로 독도가 한국 땅임을 보여줍니다.", source: "출처: [6]", category: "일본기록" },
-            { year: "1877", event: "태정관 지령", detail: "메이지 정부 최고 행정기관인 태정관이 내무성에 '울릉도와 독도는 일본과 관계없음을 명심하라'고 내린 공식 지시문입니다.", source: "출처: [7]", category: "일본기록" },
-            { year: "1900", event: "대한제국 칙령 41호", detail: "고종 황제가 독도를 '석도'로 명명하고 울릉군의 관할 구역으로 공식 반포함으로써 근대 법적으로 독도 영유권을 공고히 했습니다.", source: "출처: [8]", category: "한국령" },
-            { year: "1905", event: "시마네현 고시 40호", detail: "일본이 러일전쟁 중 군사적 목적으로 독도를 무주지라 주장하며 불법적으로 '다케시마'로 편입시킨 사건입니다.", source: "출처: [9]", category: "분쟁" },
-            { year: "1946", event: "SCAPIN 제677호", detail: "연합군최고사령관 지령으로, 일본의 통치권이 미치는 범위에서 독도를 제외함으로써 전후 국제 질서에서 독도가 한국 땅임을 재확인했습니다.", source: "출처: [10]", category: "현대사" },
-            { year: "1952", event: "평화선 선포", detail: "이승만 대통령이 '인접 해양의 주권에 관한 대통령 선언'을 통해 독도를 포함한 해양 경계선을 선포하여 실효적 지배를 강화했습니다.", source: "출처: [12]", category: "현대사" },
-            { year: "1953", event: "독도의용수비대", detail: "홍순칠 등 33인의 민간인들이 스스로 무장하여 일본의 끊임없는 침범으로부터 독도를 지켜낸 숭고한 민간 활동입니다.", source: "출처: [13]", category: "활동" },
-            { year: "2005", event: "다케시마의 날", detail: "일본 시마네현이 영유권 주장을 위해 조례로 2월 22일을 기념일로 지정하여 한일 관계의 큰 갈등 원인이 되었습니다.", source: "출처: [17]", category: "분쟁" }
+            { id: "1454", year: "1454", event: "세종실록지리지", detail: "조선 초기 관찬 지리지로, 우산(독도)과 무릉(울릉도)이 강원도 울진현에 속한다고 명확히 기록하고 있습니다. '두 섬이 서로 거리가 멀지 않아 날씨가 맑으면 바라볼 수 있다'는 설명은 독도를 지칭하는 결정적 증거입니다.", source: "[1] SEJONG SILLOK", category: "고문헌" },
+            { id: "1531", year: "1531", event: "신증동국여지승람", detail: "팔도총도에 울릉도와 독도가 그려져 있으며, 독도가 우리 영토임을 다시 한번 확고히 하는 관찬 지리지입니다.", source: "[2] DONGGUK YEOJI SUNGNAM", category: "고문헌" },
+            { id: "1667", year: "1667", event: "은주시청합기", detail: "일본 시마네현의 관리가 작성한 문헌입니다. 일본의 서북쪽 경계를 '오키섬'으로 한정하여, 울릉도와 독도가 일본 영토 밖임을 스스로 인정하고 있습니다.", source: "[3] ON SHU SHI CHO GO KI", category: "일본기록" },
+            { id: "1693", year: "1693", event: "1차 안용복 사건", detail: "안용복이 일본 어민의 불법 어로활동에 항의하다 일본으로 끌려갔으나, 오히려 독도가 조선 땅임을 당당히 주장하고 돌아온 사건입니다.", source: "[4] AN YONG-BOK 1ST", category: "활동" },
+            { id: "1696", year: "1696", event: "2차 안용복 사건", detail: "안용복이 다시 일본에 건너가 울릉도와 독도가 조선 영토임을 확인받았습니다. 이 결과로 일본 막부는 '울릉도 도해 금지령'을 내리게 됩니다.", source: "[5] AN YONG-BOK 2ND", category: "활동" },
+            { id: "1785", year: "1785", event: "삼국접양지도", detail: "일본인 학자 하야시 시헤이가 제작한 지도로, 독도를 조선과 같은 황색으로 칠하고 '조선의 것'이라고 명기하여 국제적으로 독도가 한국 땅임을 보여줍니다.", source: "[6] SANKOKU TSUYRAN ZUSU", category: "일본기록" },
+            { id: "1877", year: "1877", event: "태정관 지령", detail: "메이지 정부 최고 행정기관인 태정관이 내무성에 '울릉도와 독도는 일본과 관계없음을 명심하라'고 내린 공식 지시문입니다.", source: "[7] DAIJO-KAN ORDER", category: "일본기록" },
+            { id: "1900", year: "1900", event: "대한제국 칙령 41호", detail: "고종 황제가 독도를 '석도'로 명명하고 울릉군의 관할 구역으로 공식 반포함으로써 근대 법적으로 독도 영유권을 공고히 했습니다.", source: "[8] IMPERIAL DECREE 41", category: "한국령" },
+            { id: "1905", year: "1905", event: "시마네현 고시 40호", detail: "일본이 러일전쟁 중 군사적 목적으로 독도를 무주지라 주장하며 불법적으로 '다케시마'로 편입시킨 사건입니다.", source: "[9] SHIMANE PREF. NOTICE", category: "분쟁" },
+            { id: "1946", year: "1946", event: "SCAPIN 제677호", detail: "연합군최고사령관 지령으로, 일본의 통치권이 미치는 범위에서 독도를 제외함으로써 전후 국제 질서에서 독도가 한국 땅임을 재확인했습니다.", source: "[10] SCAPIN 677", category: "현대사" },
+            { id: "1952", year: "1952", event: "평화선 선포", detail: "이승만 대통령이 '인접 해양의 주권에 관한 대통령 선언'을 통해 독도를 포함한 해양 경계선을 선포하여 실효적 지배를 강화했습니다.", source: "[12] PEACE LINE", category: "현대사" },
+            { id: "1953", year: "1953", event: "독도의용수비대", detail: "홍순칠 등 33인의 민간인들이 스스로 무장하여 일본의 끊임없는 침범으로부터 독도를 지켜낸 숭고한 민간 활동입니다.", source: "[13] VOLUNTEER GARRISON", category: "활동" },
+            { id: "2005", year: "2005", event: "다케시마의 날", detail: "일본 시마네현이 영유권 주장을 위해 조례로 2월 22일을 기념일로 지정하여 한일 관계의 큰 갈등 원인이 되었습니다.", source: "[17] TAKESHIMA DAY", category: "분쟁" }
         ];
 
         const container = document.getElementById('timelineContainer');
@@ -222,19 +257,19 @@
                 const catColor = getCategoryColor(item.category);
                 
                 const html = `
-                    <div class="timeline-item reveal" onclick="openModal(${index})">
+                    <div id="year-${item.id}" class="timeline-item reveal" onclick="openModalById('${item.id}')">
                         <div class="timeline-dot"></div>
                         <div class="flex flex-col md:flex-row items-center w-full">
                             <div class="w-full md:w-1/2 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12 md:order-last'} mb-4 md:mb-0">
-                                <span class="text-3xl font-black text-blue-600 block mb-1">${item.year}</span>
+                                <span class="text-3xl font-black text-blue-600 block mb-1 tracking-tighter">${item.year}</span>
                                 <div class="${catColor} text-white category-tag">${item.category}</div>
-                                <h3 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">${item.event}</h3>
+                                <h3 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">${item.event}</h3>
                             </div>
                             <div class="w-full md:w-1/2 ${isEven ? 'md:pl-12' : 'md:pr-12'}">
-                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all cursor-pointer group">
-                                    <p class="text-slate-500 text-sm line-clamp-2">${item.detail}</p>
-                                    <div class="mt-4 flex items-center text-blue-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                        자세히 보기 <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                                <div class="bg-white p-7 rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all cursor-pointer group">
+                                    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2 font-medium">${item.detail}</p>
+                                    <div class="mt-4 flex items-center text-blue-600 text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                        Learn More <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                                     </div>
                                 </div>
                             </div>
@@ -247,13 +282,29 @@
             handleScroll();
         }
 
-        function openModal(index) {
-            const item = data[index];
+        // 특정 연도로 부드럽게 스크롤 및 강조
+        function scrollToYear(yearId) {
+            const element = document.getElementById(`year-${yearId}`);
+            if (element) {
+                const navHeight = 140; 
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({ top: elementPosition - navHeight, behavior: 'smooth' });
+                
+                // 잠깐 반짝이는 효과
+                element.style.transition = 'transform 0.3s';
+                element.style.transform = 'scale(1.02)';
+                setTimeout(() => element.style.transform = 'scale(1)', 300);
+            }
+        }
+
+        function openModalById(id) {
+            const item = data.find(d => d.id === id);
+            if (!item) return;
             document.getElementById('modalYear').textContent = item.year;
             document.getElementById('modalEvent').textContent = item.event;
             document.getElementById('modalDetail').textContent = item.detail;
             document.getElementById('modalSource').textContent = item.source;
-            document.getElementById('modalBanner').className = `h-32 p-8 flex items-end ${getCategoryColor(item.category)}`;
+            document.getElementById('modalBanner').className = `h-32 p-8 flex items-end ${getCategoryColor(item.category)} shadow-inner`;
             
             const modal = document.getElementById('detailModal');
             modal.classList.remove('hidden');
@@ -265,13 +316,19 @@
             document.body.style.overflow = 'auto';
         }
 
+        // 필터 버튼 클릭 시 파란색 유지 로직 수정
         function filterItems(category) {
             const btns = document.querySelectorAll('.filter-btn');
             btns.forEach(btn => {
-                btn.classList.remove('active', 'bg-blue-600', 'text-white');
-                btn.classList.add('bg-white', 'text-slate-600');
+                // 비활성 상태로 초기화
+                btn.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200');
+                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
             });
-            event.target.classList.add('active', 'bg-blue-600', 'text-white');
+
+            // 현재 클릭한 버튼 활성화 (파란색)
+            const target = event.currentTarget;
+            target.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200');
+            target.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
             
             renderTimeline(searchInput.value, category === '전체' ? 'all' : category);
         }
@@ -290,7 +347,9 @@
 
         searchInput.addEventListener('input', () => {
             const activeBtn = document.querySelector('.filter-btn.active');
-            const activeCategory = activeBtn ? activeBtn.textContent : '전체';
+            let activeCategory = activeBtn ? activeBtn.textContent : '전체';
+            // 버튼 텍스트가 '민간활동'인 경우 데이터 매칭을 위해 '활동'으로 변환
+            if (activeCategory === '민간활동') activeCategory = '활동';
             renderTimeline(searchInput.value, activeCategory === '전체' ? 'all' : activeCategory);
         });
 
